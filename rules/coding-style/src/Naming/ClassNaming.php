@@ -8,7 +8,9 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ClassNaming
 {
@@ -44,5 +46,12 @@ final class ClassNaming
         $fullyQualifiedName = trim($fullyQualifiedName, '\\');
 
         return Strings::before($fullyQualifiedName, '\\', -1) ?: null;
+    }
+
+    public function getNameFromFileInfo(SmartFileInfo $smartFileInfo): string
+    {
+        $basename = $smartFileInfo->getBasenameWithoutSuffix();
+
+        return StaticRectorStrings::underscoreToCamelCase($basename);
     }
 }
